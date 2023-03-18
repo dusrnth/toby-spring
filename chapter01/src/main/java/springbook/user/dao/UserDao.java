@@ -4,12 +4,10 @@ import springbook.user.domain.User;
 
 import java.sql.*;
 
-public class UserDao {
+public abstract class UserDao {
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        String url = "jdbc:h2:tcp://localhost/~/Documents/projects/toby-spring/chapter01/hello";
-        Connection c = DriverManager.getConnection(url, "sa", "");
+        Connection c = getConnection();
         PreparedStatement ps = c.prepareStatement(
                 "insert into users(id, name, password) values(?,?,?)");
         ps.setString(1, user.getId());
@@ -23,9 +21,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        String url = "jdbc:h2:tcp://localhost/~/Documents/projects/toby-spring/chapter01/hello";
-        Connection c = DriverManager.getConnection(url, "sa", "");
+        Connection c = getConnection();
 
         PreparedStatement ps = c.prepareStatement(
                 "select * from users where id = ?");
@@ -43,5 +39,18 @@ public class UserDao {
         c.close();
 
         return user;
+    }
+
+    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+
+    public void dbInit() throws SQLException, ClassNotFoundException {
+        Connection c = getConnection();
+        PreparedStatement ps = c.prepareStatement(
+                "delete from users where id = ?"
+        );
+        ps.setString(1, "whiteship");
+        ps.executeUpdate();
+        ps.close();
+        c.close();
     }
 }
