@@ -26,29 +26,29 @@
 ```java
 public abstract class Super {
 
-	public void templateMethod() {
-		// 기본 알고리즘 코드
-		hookMethod();
-		abstractMethod();
-		...	
-	}
+  public void templateMethod() {
+    // 기본 알고리즘 코드
+    hookMethod();
+    abstractMethod();
+		...
+  }
 
-	protected void hookMethod() {} // -> 선택적으로 오버라이드 가능한 훅메소드
-	public abstract void abstractMethod(); // -> 서브클래스에서 반드시 구현해야하는 추상메소드
+  protected void hookMethod() {} // -> 선택적으로 오버라이드 가능한 훅메소드
+  public abstract void abstractMethod(); // -> 서브클래스에서 반드시 구현해야하는 추상메소드
 
 }
 
 public class Sub1 extends Super {
 
-	@Override
-	protected void hookMethod() {
+  @Override
+  protected void hookMethod() {
 		...
-	}
+  }
 
-	@Override
-	public void abstractMethod() {
+  @Override
+  public void abstractMethod() {
 		...
-	}
+  }
 }
 ```
 변하지 않는 기능은 슈퍼클래스에 만들어두고 선택적으로 오버라이드할 수 있는 메소드를 만들어두는 것을 템플릿 메소드 패턴이라고 한다.
@@ -59,9 +59,27 @@ public class Sub1 extends Super {
 ```java
 public abstract class Sub2 extends Super {
 
-	public abstract FooInterface factoryMethod();
+  public abstract FooInterface factoryMethod();
 }
 ```
 이때 Sub2 의 관심은 FooInterface 가 어떤 구현 객체인지 전혀 관심이 없다는 것이다.
 
 참고로 객체를 생성하는 기능을 가진 메소드를 팩토리 메소드라고 하는데 패턴과는 혼동하지않도록 주의해야한다.
+
+# 1.3 DAO의 확장
+
+## 1.3.4 원칙과 패턴
+
+### 개방 폐쇄 원칙
+
+클래스나 모듈은 확장에는 열려 있어야 하고 변경에는 닫혀있어야한다.
+
+UserDao는 DB 연결 방법이라는 기능을 확장하는데에는 열려있고, 동시에 UserDao 자신의 핵심 기능을 구현한 코드는 그런 변화에 영향을 받지 않고 유지할 수 있으므로 변경에는 닫혀 있다.
+
+### 전략 패턴
+
+전략 패턴은 자신의 기능 맥락에서 필요에 따라 변경이 필요한 알고리즘을 인터페이스를 통해 통째로 외부로 분리시킨다. 전략 패턴에서 전략은 대체 가능한 전략을 말한다. 그래서 전략 패턴이다.
+
+UserDaoTest-UserDao-ConnectionMaker 구조에서 UserDao 는 전략 패턴의 컨텍스트에 해당한다. DB 연결방식이라는 알고리즘을 ConnectionMaker 라는 인터페이스로 정의하고 이 전략을 바꿔가면서 사용하도록 분리했다. 전략패턴에서 클라이언트(UserDaoTest)는 컨텍스트가 사용할 전략을 컨텍스트의 생성자 등을 통해 제공해주는 것이 일반적이다.
+
+**스프링이란 바로 지금까지 설명한 객체지향적 설계 원칙과 디자인 패턴에 나타난 자엊ㅁ을 자연스럽게 개발자들이 활용할 수 있게 해주는 프레임워크다**
