@@ -4,7 +4,7 @@ import springbook.user.domain.User;
 
 import java.sql.*;
 
-public abstract class UserDao {
+public class UserDao {
 
     public void add(User user) throws ClassNotFoundException, SQLException {
         Connection c = getConnection();
@@ -41,7 +41,7 @@ public abstract class UserDao {
         return user;
     }
 
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+//    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
 
     public void dbInit() throws SQLException, ClassNotFoundException {
         Connection c = getConnection();
