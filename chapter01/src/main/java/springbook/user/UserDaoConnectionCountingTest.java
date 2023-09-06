@@ -1,7 +1,10 @@
-package springbook.user.dao;
+package springbook.user;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import springbook.user.dao.CountingConnectionMaker;
+import springbook.user.dao.DaoFactory;
+import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
