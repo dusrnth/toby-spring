@@ -14,7 +14,7 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation files('lib/h2-1.4.199.jar')
+    implementation 'com.h2database:h2:1.4.199'
 }
 
 tasks.named('test') {

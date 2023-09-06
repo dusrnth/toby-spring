@@ -9,7 +9,7 @@ public class DConnectionMaker implements ConnectionMaker {
     public Connection makeConnection() throws ClassNotFoundException, SQLException {
         // D 사 DB Connection 생성 코드
         Class.forName("org.h2.Driver");
-        String url = "jdbc:h2:tcp://localhost/~/Documents/projects/toby-spring/chapter01/hello";
+        String url = "jdbc:h2:tcp://localhost/~/test";
         return DriverManager.getConnection(url, "sa", "");
     }
 }
