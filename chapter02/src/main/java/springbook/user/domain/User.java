@@ -1,5 +1,8 @@
 package springbook.user.domain;
 
+/**
+ * Created by pilhwankim on 13/12/2017.
+ */
 public class User {
     String id;
     String name;
