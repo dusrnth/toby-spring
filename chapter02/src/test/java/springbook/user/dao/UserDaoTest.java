@@ -7,11 +7,13 @@ import org.springframework.boot.test.context.assertj.ApplicationContextAssert;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
@@ -40,6 +42,16 @@ class UserDaoTest {
         User userget2 = dao.get(user2.getId());
         assertThat(userget2.getName()).isEqualTo(user2.getName());
         assertThat(userget2.getPassword()).isEqualTo(user2.getPassword());
+    }
+
+    @Test
+    void getUserFailure() throws SQLException {
+        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
+
+        UserDao dao = context.getBean("userDao", UserDao.class);
+        dao.deleteAll();
+        assertThat(dao.getCount()).isEqualTo(0);
+        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("unknown"));
     }
 
     @Test
