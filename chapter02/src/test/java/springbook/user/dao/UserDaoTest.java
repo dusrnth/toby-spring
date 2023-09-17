@@ -1,10 +1,12 @@
 package springbook.user.dao;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.assertj.ApplicationContextAssert;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
@@ -35,5 +37,29 @@ class UserDaoTest {
 
         assertThat(user2.getName()).isEqualTo(user.getName());
         assertThat(user2.getPassword()).isEqualTo(user.getPassword());
+    }
+
+    @Test
+    @DisplayName("리스트2-11 getCount() 테스트")
+    void count() throws SQLException, ClassNotFoundException {
+        ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
+
+        UserDao dao = applicationContext.getBean("userDao", UserDao.class);
+        User user1 = new User("hello", "헬로이름", "aladinpang");
+        User user2 = new User("sorijulru", "박창민", "eumak");
+        User user3 = new User("thinker", "팅커벨", "@#@#");
+
+        dao.deleteAll();
+        assertThat(dao.getCount()).isEqualTo(0);
+
+        dao.add(user1);
+        assertThat(dao.getCount()).isEqualTo(1);
+
+        dao.add(user2);
+        assertThat(dao.getCount()).isEqualTo(2);
+
+        dao.add(user3);
+        assertThat(dao.getCount()).isEqualTo(3);
+
     }
 }
