@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
  */
 class UserDaoTest {
-    private UserDao dao;
+    private static UserDao dao;
 
     @BeforeAll
-    void setUp() {
+    static void setUp() {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        this.dao = context.getBean("userDao", UserDao.class);
+        dao = context.getBean("userDao", UserDao.class);
     }
 
     @Test
