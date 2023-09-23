@@ -14,22 +14,26 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
+ * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테c스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
  */
 class UserDaoTest {
-    private static UserDao dao;
+    private UserDao dao;
+    private User user1;
+    private User user2;
+    private User user3;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUpEach() {
         ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
-        dao = context.getBean("userDao", UserDao.class);
+        this.dao = context.getBean("userDao", UserDao.class);
+
+        this.user1 = new User("hello", "헬로이름", "aladinpang");
+        this.user2 = new User("sorijulru", "박창민", "eumak");
+        this.user3 = new User("thinker", "팅커벨", "@#@#");
     }
 
     @Test
     void addAndGet() throws SQLException, ClassNotFoundException {
-        User user1 = new User("hello", "헬로이름", "aladinpang");
-        User user2 = new User("sorijulru", "박창민", "eumak");
-
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
@@ -56,10 +60,6 @@ class UserDaoTest {
     @Test
     @DisplayName("리스트2-11 getCount() 테스트")
     void count() throws SQLException, ClassNotFoundException {
-        User user1 = new User("hello", "헬로이름", "aladinpang");
-        User user2 = new User("sorijulru", "박창민", "eumak");
-        User user3 = new User("thinker", "팅커벨", "@#@#");
-
         dao.deleteAll();
         assertThat(dao.getCount()).isEqualTo(0);
 
@@ -71,6 +71,5 @@ class UserDaoTest {
 
         dao.add(user3);
         assertThat(dao.getCount()).isEqualTo(3);
-
     }
 }
