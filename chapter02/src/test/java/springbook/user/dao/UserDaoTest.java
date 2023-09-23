@@ -7,10 +7,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import springbook.user.domain.User;
 
+import javax.sql.DataSource;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,20 +23,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테c스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
  */
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations="/applicationContext.xml")
+//@ExtendWith(SpringExtension.class)
+//@ContextConfiguration(locations="/applicationContext.xml")
+@DirtiesContext // 테스트 메소드에서 애플리케ㅣㅇ션 컨텍스틩 구성이나 상태를 변경한다는 것을 테스트 컨텍스트 프레임워크에 알려준다.
 class UserDaoTest {
     @Autowired
-    private ApplicationContext context;
-
     private UserDao dao;
     private User user1;
     private User user2;
     private User user3;
 
     @BeforeEach
-    void setUpEach() {
-        this.dao = context.getBean("userDao", UserDao.class);
+    void setUp() {
+        String url = "jdbc:h2:tcp://localhost/~/test";
+        DataSource dataSource = new SingleConnectionDataSource(url, "sa", "", true);
+        dao.setDataSource(dataSource);
 
         this.user1 = new User("hello", "헬로이름", "aladinpang");
         this.user2 = new User("sorijulru", "박창민", "eumak");
