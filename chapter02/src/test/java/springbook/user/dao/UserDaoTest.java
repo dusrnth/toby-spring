@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테c스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
  */
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(locations="/applicationContext.xml")
-@DirtiesContext // 테스트 메소드에서 애플리케ㅣㅇ션 컨텍스틩 구성이나 상태를 변경한다는 것을 테스트 컨텍스트 프레임워크에 알려준다.
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(locations="/applicationContext.xml")
+@DirtiesContext // 컨텍스트 내에서 DataSource가 더럽혀졌다고 볼수있다, 다른 테스트에서 더럽혀진 컨텍스트는 사용하지 않는다.
 class UserDaoTest {
     @Autowired
     private UserDao dao;
