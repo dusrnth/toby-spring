@@ -1,22 +1,30 @@
 package springbook.user.dao;
 
-import org.junit.jupiter.api.*;
-import org.springframework.boot.test.context.assertj.ApplicationContextAssert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * DB에 남아 있는 데이터와 같은 외부 환경에 영향을 받지 말아야하는 것은 물론이고 테c스트를 실행하는 순서를 바꿔도 동일한 결과가 보장되도록 만들어야 한다.
  */
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(locations="/applicationContext.xml")
 class UserDaoTest {
+    @Autowired
+    private ApplicationContext context;
+
     private UserDao dao;
     private User user1;
     private User user2;
@@ -24,7 +32,6 @@ class UserDaoTest {
 
     @BeforeEach
     void setUpEach() {
-        ApplicationContext context = new GenericXmlApplicationContext("applicationContext.xml");
         this.dao = context.getBean("userDao", UserDao.class);
 
         this.user1 = new User("hello", "헬로이름", "aladinpang");
